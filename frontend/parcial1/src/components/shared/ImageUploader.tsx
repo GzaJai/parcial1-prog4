@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Upload, X, ImageIcon, Loader2, CheckCircle2 } from 'lucide-react';
+import { Upload, X, Loader2, CheckCircle2 } from 'lucide-react';
 import { useUpload } from '../../hooks/useUpload';
+import { getImageUrl } from '../../utils/format';
 
 interface ImageUploaderProps {
   onUploadSuccess: (url: string) => void;
@@ -41,23 +42,25 @@ export default function ImageUploader({ onUploadSuccess, label = "Seleccionar im
 
   return (
     <div className="space-y-3">
-      <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest">{label}</label>
+      <label className="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest ml-1">
+        {label}
+      </label>
       
-      <div className={`relative group border-2 border-dashed rounded-2xl transition-all duration-300 min-h-[120px] flex flex-col items-center justify-center p-4 ${
+      <div className={`relative group border-2 border-dashed rounded-2xl transition-all duration-300 min-h-[140px] flex flex-col items-center justify-center p-4 ${
         preview 
-          ? 'border-brand/30 bg-brand/5 dark:bg-brand/5' 
-          : 'border-slate-200 dark:border-slate-800 hover:border-brand/50 bg-slate-50 dark:bg-slate-950'
+          ? 'border-brand/30 bg-brand/5' 
+          : 'border-slate-100 dark:border-slate-800 hover:border-brand bg-slate-50/50 dark:bg-slate-950/30'
       }`}>
         
         {isUploading ? (
           <div className="flex flex-col items-center gap-2">
             <Loader2 className="text-brand animate-spin" size={32} />
-            <p className="text-xs font-bold text-brand animate-pulse">SUBIENDO...</p>
+            <p className="text-[10px] font-black text-brand animate-pulse tracking-widest">SUBIENDO...</p>
           </div>
         ) : preview ? (
-          <div className="relative w-full flex flex-col items-center gap-3">
-            <div className="w-20 h-20 rounded-xl overflow-hidden border border-brand/20 shadow-lg">
-              <img src={preview} alt="Preview" className="w-full h-full object-cover" />
+          <div className="relative w-full flex flex-col items-center gap-4">
+            <div className="w-24 h-24 rounded-2xl overflow-hidden border-2 border-brand/20 shadow-xl shadow-brand/10">
+              <img src={getImageUrl(preview)} alt="Preview" className="w-full h-full object-cover" />
             </div>
             
             {success && (
@@ -70,19 +73,20 @@ export default function ImageUploader({ onUploadSuccess, label = "Seleccionar im
             <button 
               type="button"
               onClick={clearImage}
-              className="absolute -top-2 -right-2 p-1.5 bg-red-500 text-white rounded-full shadow-lg hover:scale-110 transition-transform"
+              className="absolute -top-2 -right-2 p-2 bg-red-500 text-white rounded-full shadow-lg hover:scale-110 active:scale-90 transition-all"
             >
               <X size={14} />
             </button>
           </div>
         ) : (
-          <label className="cursor-pointer flex flex-col items-center gap-2 w-full h-full">
-            <div className="p-3 bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 group-hover:scale-110 transition-transform">
-              <Upload className="text-slate-400 group-hover:text-brand transition-colors" size={24} />
+          <label className="cursor-pointer flex flex-col items-center gap-3 w-full h-full py-4">
+            <div className="p-4 bg-white dark:bg-slate-900 rounded-2xl shadow-sm border border-slate-100 dark:border-slate-800 group-hover:scale-110 group-hover:rotate-3 transition-all">
+              <Upload className="text-slate-400 group-hover:text-brand" size={28} />
             </div>
-            <span className="text-xs font-bold text-slate-500 group-hover:text-slate-700 dark:group-hover:text-slate-300 transition-colors">
-              Click para seleccionar
-            </span>
+            <div className="text-center">
+              <p className="text-xs font-bold text-slate-700 dark:text-slate-300">Click para subir</p>
+              <p className="text-[10px] text-slate-400 mt-1 uppercase tracking-tighter">JPG, PNG o WEBP (Máx 5MB)</p>
+            </div>
             <input 
               type="file" 
               className="hidden" 

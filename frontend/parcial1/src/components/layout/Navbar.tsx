@@ -1,15 +1,15 @@
-import { useState, useEffect } from 'react';
 import { 
   LayoutDashboard, 
   Package, 
   Tags, 
   Salad, 
-  Search
+  Search,
+  Zap
 } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
 const sidebarItems = [
-  { name: 'Dashboard', path: '/', icon: LayoutDashboard },
+  { name: 'Panel de Control', path: '/', icon: LayoutDashboard },
   { name: 'Categorías', path: '/categorias', icon: Tags },
   { name: 'Productos', path: '/productos', icon: Package },
   { name: 'Ingredientes', path: '/ingredientes', icon: Salad },
@@ -17,61 +17,41 @@ const sidebarItems = [
 
 export function Sidebar() {
   return (
-    <aside className="w-64 bg-[var(--bg-sidebar)] border-r border-[var(--border-subtle)] flex flex-col transition-colors">
-      <div className="p-8">
-        <div className="flex items-center gap-3">
-          <div className="w-8 h-8 bg-brand rounded-sm flex items-center justify-center">
-            <Package size={18} className="text-zinc-950" />
+    <aside className="w-72 bg-white dark:bg-slate-950 border-r border-slate-100 dark:border-slate-900 flex flex-col transition-all duration-500">
+      <div className="p-10">
+        <div className="flex items-center gap-4 group cursor-pointer">
+          <div className="w-10 h-10 bg-brand rounded-2xl flex items-center justify-center shadow-lg shadow-brand/20 group-hover:rotate-12 transition-transform">
+            <Zap size={22} className="text-white" fill="currentColor" />
           </div>
-          <span className="text-xl font-bold tracking-tighter text-[var(--text-primary)]">InventoryOS</span>
+          <div className="flex flex-col">
+            <span className="text-xl font-black tracking-tight text-slate-900 dark:text-white">InventoryOS</span>
+          </div>
         </div>
       </div>
 
-      <nav className="flex-1 px-4 py-4 space-y-2">
+      <nav className="flex-1 px-6 py-4 space-y-2">
+        <p className="px-4 text-[10px] font-black text-slate-400 dark:text-slate-600 uppercase tracking-[0.2em] mb-4">Navegación Principal</p>
         {sidebarItems.map((item) => (
           <NavLink
             key={item.name}
             to={item.path}
             className={({ isActive }) =>
-              `flex items-center gap-3 px-4 py-3 rounded-sm text-sm font-bold transition-all ${
+              `flex items-center gap-3 px-5 py-4 rounded-2xl text-sm font-bold transition-all ${
                 isActive 
-                  ? 'bg-brand/10 text-brand border-l-2 border-brand' 
-                  : 'text-[var(--text-secondary)] hover:bg-zinc-800/20 hover:text-[var(--text-primary)]'
+                  ? 'bg-slate-900 dark:bg-white text-white dark:text-slate-950 shadow-xl shadow-slate-200 dark:shadow-none' 
+                  : 'text-slate-500 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-900 hover:text-slate-900 dark:hover:text-white'
               }`
             }
           >
-            <item.icon size={18} />
-            {item.name}
+            {({ isActive }) => (
+              <>
+                <item.icon size={20} strokeWidth={isActive ? 2.5 : 2} />
+                {item.name}
+              </>
+            )}
           </NavLink>
         ))}
       </nav>
     </aside>
-  );
-}
-
-export function TopBar() {
-  const [isLight] = useState(false);
-
-  useEffect(() => {
-    if (isLight) {
-      document.documentElement.classList.add('light');
-    } else {
-      document.documentElement.classList.remove('light');
-    }
-  }, [isLight]);
-
-  return (
-    <header className="h-16 border-b border-[var(--border-subtle)] bg-[var(--bg-sidebar)]/50 backdrop-blur-md flex items-center justify-between px-8 transition-colors">
-      <div className="flex-1 max-w-xl">
-        <div className="relative group">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600 group-focus-within:text-brand transition-colors" />
-          <input 
-            type="text" 
-            placeholder="Buscar en el inventario..." 
-            className="w-full bg-[var(--bg-main)] border border-[var(--border-subtle)] rounded-sm pl-10 pr-4 py-2 text-xs focus:outline-none focus:ring-1 focus:ring-brand/30 transition-all text-[var(--text-primary)]"
-          />
-        </div>
-      </div>
-    </header>
   );
 }
