@@ -19,7 +19,7 @@ class Producto(SQLModel, table=True):
     nombre: str = Field(index=True)
     descripcion: str
     precio_base: Decimal = Field(max_digits=10, decimal_places=2)
-    imagenes_url: List[str] = Field(sa_column=Column(JSON))
+    imagenes_url: List[str] = Field(default_factory=list, sa_column=Column(JSON))
     stock_cantidad: int = Field(default=0)
     disponible: bool = Field(default=True)
 

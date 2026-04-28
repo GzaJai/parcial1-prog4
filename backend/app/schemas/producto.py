@@ -6,7 +6,7 @@ class ProductoBase(BaseModel):
     nombre: str
     descripcion: str
     precio_base: Decimal
-    imagenes_url: List[str]
+    imagenes_url: List[str] = []
     stock_cantidad: int = 0
     disponible: bool = True
 
