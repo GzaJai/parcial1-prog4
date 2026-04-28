@@ -45,16 +45,6 @@ export function Sidebar() {
           </NavLink>
         ))}
       </nav>
-
-      <div className="p-6 border-t border-[var(--border-subtle)]">
-        <div className="bg-zinc-900/40 p-4 rounded-sm border border-[var(--border-subtle)]">
-          <p className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest">Estado Sistema</p>
-          <div className="flex items-center gap-2 mt-2">
-            <div className="w-1.5 h-1.5 rounded-full bg-brand animate-pulse" />
-            <span className="text-[10px] text-zinc-400 font-bold uppercase">Online</span>
-          </div>
-        </div>
-      </div>
     </aside>
   );
 }
