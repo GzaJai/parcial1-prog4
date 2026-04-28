@@ -1,6 +1,6 @@
 import React from 'react';
 import { Pencil, Trash2, Eye, Package } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Table, TableHeader, TableRow, TableCell } from '../../components/ui/Table';
 import Button from '../../components/ui/Button';
 import { Badge } from '../../components/ui/Input';
@@ -14,6 +14,7 @@ interface ProductoListProps {
 }
 
 export default function ProductoList({ data, onEdit, onDelete }: ProductoListProps) {
+  const navigate = useNavigate();
   const columns = ['Producto', 'Categoría', 'Precio', 'Stock', 'Acciones'];
 
   return (
@@ -21,7 +22,11 @@ export default function ProductoList({ data, onEdit, onDelete }: ProductoListPro
       <TableHeader columns={columns} />
       <tbody>
         {data.map((item) => (
-          <TableRow key={item.id}>
+          <TableRow 
+            key={item.id} 
+            onClick={() => navigate(`/productos/${item.id}`)}
+            className="cursor-pointer"
+          >
             <TableCell>
               <div className="flex items-center gap-4">
                 <div className="w-12 h-12 bg-slate-50 dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800 flex items-center justify-center overflow-hidden shrink-0 shadow-sm">
@@ -32,12 +37,9 @@ export default function ProductoList({ data, onEdit, onDelete }: ProductoListPro
                   )}
                 </div>
                 <div className="flex flex-col">
-                  <Link 
-                    to={`/productos/${item.id}`} 
-                    className="font-bold text-slate-900 dark:text-white hover:text-brand transition-colors text-base tracking-tight"
-                  >
+                  <span className="font-bold text-slate-900 dark:text-white hover:text-brand transition-colors text-base tracking-tight">
                     {item.nombre}
-                  </Link>
+                  </span>
                   <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest">ID: #{item.id}</span>
                 </div>
               </div>
@@ -56,7 +58,7 @@ export default function ProductoList({ data, onEdit, onDelete }: ProductoListPro
             <TableCell>
               <div className="flex flex-col gap-1">
                 <div className="flex items-center gap-2">
-                  <div className={`w-2 h-2 rounded-full ${item.disponible ? 'bg-brand' : 'bg-red-500 shadow-lg shadow-red-500/20'}`} />
+                  <div className={`w-2 h-2 rounded-full ${item.disponible ? 'bg-brand shadow-[0_0_8px_rgba(6,182,212,0.4)]' : 'bg-red-500 shadow-lg shadow-red-500/20'}`} />
                   <span className={`font-mono font-bold ${item.stock_cantidad < 5 ? 'text-red-500' : 'text-slate-600 dark:text-slate-400'}`}>
                     {item.stock_cantidad} uds
                   </span>
@@ -66,7 +68,7 @@ export default function ProductoList({ data, onEdit, onDelete }: ProductoListPro
             </TableCell>
             
             <TableCell>
-              <div className="flex items-center gap-1">
+              <div className="flex items-center gap-1" onClick={(e) => e.stopPropagation()}>
                 <Link 
                   to={`/productos/${item.id}`}
                   className="p-2 text-slate-400 hover:text-brand transition-all hover:scale-110"

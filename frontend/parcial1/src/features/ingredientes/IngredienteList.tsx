@@ -1,4 +1,3 @@
-import React from 'react';
 import { Pencil, Trash2, AlertTriangle, Salad } from 'lucide-react';
 import { Table, TableHeader, TableRow, TableCell } from '../../components/ui/Table';
 import Button from '../../components/ui/Button';
