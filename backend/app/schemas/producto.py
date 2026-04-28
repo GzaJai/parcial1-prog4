@@ -24,12 +24,12 @@ class ProductoUpdate(BaseModel):
     categoria_ids: Optional[List[int]] = None
     ingrediente_ids: Optional[List[int]] = None
 
-from .categoria import Categoria
-from .ingrediente import Ingrediente
+from .categoria import CategoriaRead
+from .ingrediente import IngredienteRead
 
 class ProductoRead(ProductoBase):
     id: int
-    categorias: List[Categoria] = []
-    ingredientes: List[Ingrediente] = []
+    categorias: List[CategoriaRead] = []
+    ingredientes: List[IngredienteRead] = []
     
     model_config = ConfigDict(from_attributes=True)
