@@ -1,13 +1,14 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { categoriaService } from '../services/categoriaService';
-import type { CategoriaCreate, CategoriaUpdate } from '../types';
+import type { CategoriaUpdate } from '../types';
 
-export function useCategorias() {
+export function useCategorias(page: number = 1, limit: number = 10) {
   const queryClient = useQueryClient();
+  const offset = (page - 1) * limit;
 
   const categoriasQuery = useQuery({
-    queryKey: ['categorias'],
-    queryFn: categoriaService.getAll,
+    queryKey: ['categorias', page, limit],
+    queryFn: () => categoriaService.getAll(offset, limit),
   });
 
   const createMutation = useMutation({

@@ -1,9 +1,11 @@
 import api from './api';
-import type { Categoria, CategoriaCreate, CategoriaUpdate } from '../types';
+import type { Categoria, CategoriaCreate, CategoriaUpdate, PaginatedResponse } from '../types';
 
 export const categoriaService = {
-  getAll: async () => {
-    const { data } = await api.get<Categoria[]>('/categorias/');
+  getAll: async (offset: number = 0, limit: number = 10) => {
+    const { data } = await api.get<PaginatedResponse<Categoria>>('/categorias/', {
+      params: { offset, limit },
+    });
     return data;
   },
   getById: async (id: number) => {

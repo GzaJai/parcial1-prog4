@@ -20,9 +20,9 @@ interface ProductoFormProps {
 
 export default function ProductoForm({ initialData, onSuccess, onCancel }: ProductoFormProps) {
   const queryClient = useQueryClient();
+  const { categoriasQuery } = useCategorias(1, 1000); // Fetch all for select
+  const { ingredientesQuery } = useIngredientes(1, 1000); // Fetch all for select
   const { createMutation, updateMutation } = useProductos();
-  const { categoriasQuery } = useCategorias();
-  const { ingredientesQuery } = useIngredientes();
   
   const [formData, setFormData] = useState<ProductoCreate>({
     nombre: initialData?.nombre || '',

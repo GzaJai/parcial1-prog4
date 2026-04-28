@@ -1,13 +1,14 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { productoService } from '../services/productoService';
-import type { Producto, ProductoCreate, ProductoUpdate } from '../types';
+import type { ProductoUpdate } from '../types';
 
-export function useProductos() {
+export function useProductos(page: number = 1, limit: number = 10) {
   const queryClient = useQueryClient();
+  const offset = (page - 1) * limit;
 
   const productosQuery = useQuery({
-    queryKey: ['productos'],
-    queryFn: () => productoService.getAll(true),
+    queryKey: ['productos', page, limit],
+    queryFn: () => productoService.getAll(offset, limit, true),
   });
 
   const createMutation = useMutation({
@@ -22,7 +23,7 @@ export function useProductos() {
       productoService.update(id, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['productos'] });
-      queryClient.invalidateQueries({ queryKey: ['producto'] }); // Invalidate detail view too
+      queryClient.invalidateQueries({ queryKey: ['producto'] });
     },
   });
 

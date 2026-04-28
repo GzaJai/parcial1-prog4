@@ -1,10 +1,10 @@
 import api from './api';
-import type { Producto, ProductoCreate, ProductoUpdate } from '../types';
+import type { Producto, ProductoCreate, ProductoUpdate, PaginatedResponse } from '../types';
 
 export const productoService = {
-  getAll: async (disponible: boolean = true) => {
-    const { data } = await api.get<Producto[]>('/productos/', {
-      params: { disponible },
+  getAll: async (offset: number = 0, limit: number = 10, disponible: boolean = true) => {
+    const { data } = await api.get<PaginatedResponse<Producto>>('/productos/', {
+      params: { offset, limit, disponible },
     });
     return data;
   },

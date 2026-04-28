@@ -17,9 +17,9 @@ export default function Dashboard() {
     return <ErrorMessage message="No se pudo obtener la información estadística del servidor." />;
   }
 
-  const totalProductos = productosQuery.data?.length || 0;
-  const totalCategorias = categoriasQuery.data?.length || 0;
-  const stockBajo = productosQuery.data?.filter(p => p.stock_cantidad < 5).length || 0;
+  const totalProductos = productosQuery.data?.total || 0;
+  const totalCategorias = categoriasQuery.data?.total || 0;
+  const stockBajo = productosQuery.data?.items?.filter(p => p.stock_cantidad < 5).length || 0;
 
   const stats = [
     { name: 'Total Productos', value: totalProductos, icon: Package, variant: 'default' as const },
@@ -27,8 +27,8 @@ export default function Dashboard() {
     { name: 'Alertas de Stock', value: stockBajo, icon: AlertCircle, variant: 'danger' as const },
   ];
 
-  const recentProducts = productosQuery.data?.slice(0, 5) || [];
-  const topCategories = categoriasQuery.data?.slice(0, 5) || [];
+  const recentProducts = productosQuery.data?.items?.slice(0, 5) || [];
+  const topCategories = categoriasQuery.data?.items?.slice(0, 5) || [];
 
   return (
     <div className="space-y-8 animate-in fade-in duration-500">

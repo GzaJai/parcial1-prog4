@@ -7,9 +7,12 @@ import CategoriaForm from '../features/categorias/CategoriaForm';
 import CategoriaList from '../features/categorias/CategoriaList';
 import { Plus } from 'lucide-react';
 import type { Categoria } from '../types';
+import Pagination from '../components/ui/Pagination';
 
 export default function Categorias() {
-  const { categoriasQuery, deleteMutation } = useCategorias();
+  const [page, setPage] = useState(1);
+  const limit = 10;
+  const { categoriasQuery, deleteMutation } = useCategorias(page, limit);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<Categoria | null>(null);
 
@@ -30,11 +33,11 @@ export default function Categorias() {
   };
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-500">
+    <div className="space-y-8 animate-in fade-in duration-500 pb-12">
       <header className="flex items-center justify-between bg-white dark:bg-slate-900/50 p-8 rounded-[2.5rem] border border-slate-100 dark:border-slate-800 shadow-sm">
         <div>
           <h1 className="text-4xl font-black text-slate-900 dark:text-white tracking-tight">Categorías</h1>
-          <p className="text-slate-500 dark:text-slate-400 mt-1 font-medium">Organización estratégica del catálogo.</p>
+          <p className="text-slate-500 dark:text-slate-400 mt-1 font-medium italic">Organización jerárquica del catálogo de productos.</p>
         </div>
         <Button variant="cyan" onClick={handleOpenCreate} leftIcon={<Plus size={18} />}>
           Nueva Categoría
@@ -44,13 +47,23 @@ export default function Categorias() {
       {categoriasQuery.isLoading ? (
         <PageLoader message="Cargando categorías..." />
       ) : categoriasQuery.isError ? (
-        <ErrorMessage message="No se pudieron cargar las categorías. Verifique la conexión." />
+        <ErrorMessage message="Ocurrió un error al cargar las categorías. Intente nuevamente." />
       ) : (
-        <CategoriaList 
-          data={categoriasQuery.data || []} 
-          onEdit={handleOpenEdit} 
-          onDelete={handleDelete} 
-        />
+        <>
+          <CategoriaList 
+            data={categoriasQuery.data?.items || []} 
+            onEdit={handleOpenEdit} 
+            onDelete={handleDelete} 
+          />
+          
+          <Pagination 
+            currentPage={page}
+            totalItems={categoriasQuery.data?.total || 0}
+            limit={limit}
+            onPageChange={setPage}
+            isLoading={categoriasQuery.isFetching}
+          />
+        </>
       )}
 
       <Modal 
