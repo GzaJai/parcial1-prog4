@@ -5,9 +5,11 @@ import { useCategorias } from '../hooks/useCategorias';
 import { useIngredientes } from '../hooks/useIngredientes';
 import DataTable from '../components/common/DataTable';
 import Modal from '../components/common/Modal';
-import { Plus, Pencil, Trash2, Eye, Package, AlertTriangle, Image as ImageIcon } from 'lucide-react';
+import ImageUploader from '../components/common/ImageUploader';
+import { Plus, Pencil, Trash2, Eye, Package, AlertTriangle, X } from 'lucide-react';
 import type { Producto, ProductoCreate } from '../types';
 import { Link } from 'react-router-dom';
+import { getImageUrl } from '../utils/format';
 
 export default function Productos() {
   const queryClient = useQueryClient();
@@ -41,7 +43,7 @@ export default function Productos() {
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 bg-slate-100 dark:bg-slate-950 rounded border border-slate-200 dark:border-slate-800 flex items-center justify-center overflow-hidden shrink-0 shadow-sm">
             {item.imagenes_url?.[0] ? (
-              <img src={item.imagenes_url[0]} className="w-full h-full object-cover" alt={item.nombre} />
+              <img src={getImageUrl(item.imagenes_url[0])} className="w-full h-full object-cover" alt={item.nombre} />
             ) : (
               <Package size={16} className="text-slate-400" />
             )}
@@ -107,7 +109,6 @@ export default function Productos() {
     e.preventDefault();
     setServerError(null);
 
-    // Mapear el precio a número y asegurar que categoria_ids sea un array válido
     const submissionData = {
       ...formData,
       precio_base: Number(formData.precio_base)
@@ -174,7 +175,6 @@ export default function Productos() {
           )}
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Columna Izquierda: Info Básica */}
             <div className="space-y-4">
               <div>
                 <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Información del Producto</label>
@@ -219,28 +219,32 @@ export default function Productos() {
               </div>
             </div>
 
-            {/* Columna Derecha: Relaciones e Imagen */}
             <div className="space-y-4">
               <div>
-                <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">Imagen y Categoría</label>
-                <div className="flex gap-2 mb-3">
-                  <div className="relative flex-1">
-                    <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
-                    <input
-                      type="url"
-                      className="input-standard w-full pl-10"
-                      placeholder="URL de la imagen"
-                      value={formData.imagenes_url?.[0] || ''}
-                      onChange={e => setFormData({ ...formData, imagenes_url: e.target.value ? [e.target.value] : [] })}
-                    />
+                <ImageUploader 
+                  label="Añadir Imagen"
+                  onUploadSuccess={(url) => setFormData({ ...formData, imagenes_url: [...(formData.imagenes_url || []), url] })}
+                />
+                {formData.imagenes_url && formData.imagenes_url.length > 0 && (
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    {formData.imagenes_url.map((url, idx) => (
+                      <div key={idx} className="relative w-12 h-12 rounded-lg overflow-hidden border border-slate-200 group">
+                        <img src={getImageUrl(url)} className="w-full h-full object-cover" alt="Gallery" />
+                        <button 
+                          type="button"
+                          onClick={() => setFormData({ ...formData, imagenes_url: formData.imagenes_url?.filter((_, i) => i !== idx) })}
+                          className="absolute inset-0 bg-red-500/80 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                        >
+                          <X size={12} />
+                        </button>
+                      </div>
+                    ))}
                   </div>
-                  {formData.imagenes_url?.[0] && (
-                    <div className="w-11 h-11 rounded border border-slate-200 overflow-hidden shrink-0">
-                      <img src={formData.imagenes_url[0]} className="w-full h-full object-cover" alt="Preview" />
-                    </div>
-                  )}
-                </div>
+                )}
+              </div>
 
+              <div>
+                <label className="block text-[10px] font-bold text-slate-400 uppercase mb-2">Categoría</label>
                 <select
                   required
                   className="input-standard w-full appearance-none"

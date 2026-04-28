@@ -2,6 +2,7 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { productoService } from '../services/productoService';
 import { ChevronLeft, Package, DollarSign, Database, CheckCircle2, XCircle, AlertTriangle, Tag } from 'lucide-react';
+import { getImageUrl } from '../utils/format';
 
 export default function ProductoDetalle() {
   const { id } = useParams<{ id: string }>();
@@ -63,7 +64,7 @@ export default function ProductoDetalle() {
           <div className="aspect-square bg-white dark:bg-slate-950 border-2 border-slate-100 dark:border-slate-800 rounded-[2.5rem] overflow-hidden shadow-xl shadow-slate-200/50 dark:shadow-none group relative">
             {producto.imagenes_url && producto.imagenes_url.length > 0 ? (
               <img 
-                src={producto.imagenes_url[0]} 
+                src={getImageUrl(producto.imagenes_url[0])} 
                 alt={producto.nombre} 
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
               />
@@ -95,7 +96,7 @@ export default function ProductoDetalle() {
             <div className="grid grid-cols-4 gap-3">
               {producto.imagenes_url.slice(1, 5).map((url, i) => (
                 <div key={i} className="aspect-square bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl overflow-hidden hover:border-brand transition-colors cursor-pointer">
-                  <img src={url} alt={`${producto.nombre} ${i}`} className="w-full h-full object-cover" />
+                  <img src={getImageUrl(url)} alt={`${producto.nombre} ${i}`} className="w-full h-full object-cover" />
                 </div>
               ))}
             </div>

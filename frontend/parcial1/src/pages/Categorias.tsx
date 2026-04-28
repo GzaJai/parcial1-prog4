@@ -3,7 +3,9 @@ import { useCategorias } from '../hooks/useCategorias';
 import DataTable from '../components/common/DataTable';
 import Modal from '../components/common/Modal';
 import { Plus, Pencil, Trash2, Tags, Info, Image as ImageIcon } from 'lucide-react';
+import ImageUploader from '../components/common/ImageUploader';
 import type { Categoria, CategoriaCreate } from '../types';
+import { getImageUrl } from '../utils/format';
 
 export default function Categorias() {
   const { categoriasQuery, createMutation, updateMutation, deleteMutation } = useCategorias();
@@ -17,7 +19,7 @@ export default function Categorias() {
       accessor: (item: Categoria) => (
         <div className="w-10 h-10 bg-slate-100 dark:bg-slate-950 rounded border border-slate-200 dark:border-slate-800 flex items-center justify-center overflow-hidden shrink-0 shadow-sm">
           {item.imagen_url ? (
-            <img src={item.imagen_url} className="w-full h-full object-cover" alt={item.nombre} />
+            <img src={getImageUrl(item.imagen_url)} className="w-full h-full object-cover" alt={item.nombre} />
           ) : (
             <Tags size={16} className="text-slate-400" />
           )}
@@ -113,24 +115,18 @@ export default function Categorias() {
             </div>
             
             <div>
-              <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-2">URL de la Imagen</label>
-              <div className="flex gap-2">
-                <div className="relative flex-1">
-                  <ImageIcon className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" size={16} />
-                  <input 
-                    type="url" 
-                    placeholder="https://ejemplo.com/imagen.jpg"
-                    className="input-standard w-full pl-10" 
-                    value={formData.imagen_url} 
-                    onChange={(e) => setFormData({ ...formData, imagen_url: e.target.value })} 
-                  />
-                </div>
-                {formData.imagen_url && (
-                  <div className="w-11 h-11 rounded border border-slate-200 overflow-hidden shrink-0">
-                    <img src={formData.imagen_url} className="w-full h-full object-cover" alt="Preview" />
+              <ImageUploader 
+                label="Imagen de la Categoría"
+                onUploadSuccess={(url) => setFormData({ ...formData, imagen_url: url })}
+              />
+              {formData.imagen_url && (
+                <div className="mt-2 p-2 bg-slate-50 dark:bg-slate-950 rounded border border-slate-100 dark:border-slate-800 flex items-center gap-2">
+                  <div className="w-8 h-8 rounded overflow-hidden border border-slate-200">
+                    <img src={getImageUrl(formData.imagen_url)} className="w-full h-full object-cover" alt="Actual" />
                   </div>
-                )}
-              </div>
+                  <span className="text-[10px] text-slate-400 truncate flex-1">{formData.imagen_url}</span>
+                </div>
+              )}
             </div>
 
             <div>
