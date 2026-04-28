@@ -46,7 +46,12 @@ export default function Productos() {
               <Package size={16} className="text-slate-400" />
             )}
           </div>
-          <span className="font-bold text-slate-900 dark:text-slate-100 truncate max-w-[200px]">{item.nombre}</span>
+          <Link 
+            to={`/productos/${item.id}`} 
+            className="font-bold text-slate-900 dark:text-slate-100 hover:text-brand transition-colors truncate max-w-[200px]"
+          >
+            {item.nombre}
+          </Link>
         </div>
       )
     },
