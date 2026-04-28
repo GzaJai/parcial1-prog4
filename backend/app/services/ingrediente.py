@@ -9,8 +9,11 @@ class IngredienteService:
     def __init__(self, uow: UnitOfWork):
         self.uow = uow
 
-    def get_all(self, offset: int = 0, limit: int = 10) -> List[Ingrediente]:
-        return self.uow.session.exec(select(Ingrediente).offset(offset).limit(limit)).all()
+    def get_all(self, offset: int = 0, limit: int = 10):
+        statement = select(Ingrediente).order_by(Ingrediente.id.desc())
+        total = len(self.uow.session.exec(select(Ingrediente)).all())
+        results = self.uow.session.exec(statement.offset(offset).limit(limit)).all()
+        return {"items": results, "total": total}
 
     def get_by_id(self, id: int) -> Ingrediente:
         ingrediente = self.uow.session.get(Ingrediente, id)

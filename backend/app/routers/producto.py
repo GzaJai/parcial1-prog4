@@ -12,13 +12,22 @@ def get_producto_service(session: Annotated[Session, Depends(get_session)]):
     uow = UnitOfWork(session)
     return ProductoService(uow)
 
-@router.get("/", response_model=List[ProductoRead], summary="Listar todos los productos", description="Retorna una lista de todos los productos registrados en el sistema.")
+from schemas.common import PaginatedResponse
+
+@router.get("/", response_model=PaginatedResponse[ProductoRead], summary="Listar todos los productos", description="Retorna una lista paginada de todos los productos ordenados por ID descendente.")
 def listar_productos(
     service: Annotated[ProductoService, Depends(get_producto_service)],
     offset: int = Query(0, ge=0, description="Número de registros a omitir"),
     limit: int = Query(10, ge=1, le=100, description="Número máximo de registros a retornar")
 ):
-    return service.get_all(offset=offset, limit=limit)
+    result = service.get_all(offset=offset, limit=limit)
+    return {
+        "items": result["items"],
+        "total": result["total"],
+        "offset": offset,
+        "limit": limit,
+        "count": len(result["items"])
+    }
 
 @router.get("/{id}", response_model=ProductoRead, summary="Obtener producto por ID")
 def obtener_producto(

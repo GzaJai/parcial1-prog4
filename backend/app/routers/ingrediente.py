@@ -12,13 +12,22 @@ def get_ingrediente_service(session: Session = Depends(get_session)):
     uow = UnitOfWork(session)
     return IngredienteService(uow)
 
-@router.get("/", response_model=List[IngredienteRead], status_code=status.HTTP_200_OK)
+from schemas.common import PaginatedResponse
+
+@router.get("/", response_model=PaginatedResponse[IngredienteRead], status_code=status.HTTP_200_OK)
 def list_ingredientes(
     service: IngredienteService = Depends(get_ingrediente_service),
     offset: int = Query(0, ge=0),
     limit: int = Query(10, ge=1, le=100)
 ):
-    return service.get_all(offset=offset, limit=limit)
+    result = service.get_all(offset=offset, limit=limit)
+    return {
+        "items": result["items"],
+        "total": result["total"],
+        "offset": offset,
+        "limit": limit,
+        "count": len(result["items"])
+    }
 
 @router.get("/{id}", response_model=IngredienteRead, status_code=status.HTTP_200_OK)
 def get_ingrediente(id: int, service: IngredienteService = Depends(get_ingrediente_service)):

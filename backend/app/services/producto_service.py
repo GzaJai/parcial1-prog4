@@ -12,8 +12,11 @@ class ProductoService:
     def __init__(self, uow: UnitOfWork):
         self.uow = uow
 
-    def get_all(self, offset: int = 0, limit: int = 10) -> List[Producto]:
-        return self.uow.session.exec(select(Producto).offset(offset).limit(limit)).all()
+    def get_all(self, offset: int = 0, limit: int = 10):
+        statement = select(Producto).order_by(Producto.id.desc())
+        total = len(self.uow.session.exec(select(Producto)).all())
+        results = self.uow.session.exec(statement.offset(offset).limit(limit)).all()
+        return {"items": results, "total": total}
 
     def get_by_id(self, id: int) -> Producto:
         producto = self.uow.session.get(Producto, id)
