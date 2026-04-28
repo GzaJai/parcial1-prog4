@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+@theme {
+  --color-brand: #00e5ff;
+  --color-brand-dim: rgba(0, 229, 255, 0.1);
+  --color-accent-salmon: #ff7e7e;
+}
+
+@layer base {
+  body {
+    @apply bg-white text-slate-900 antialiased transition-colors duration-200;
+    @apply dark:bg-slate-950 dark:text-slate-100;
+  }
+}
+
+@layer utilities {
+  .btn-cyan {
+    @apply bg-brand text-slate-900 px-4 py-2 rounded-lg font-bold flex items-center gap-2 hover:brightness-110 active:scale-95 transition-all shadow-sm;
+  }
+
+  .input-standard {
+    @apply w-full rounded-lg border border-slate-200 bg-white px-4 py-2 text-slate-900;
+    @apply focus:outline-none focus:ring-2 focus:ring-brand/30 focus:border-brand transition-all;
+    @apply dark:bg-slate-900 dark:border-slate-800 dark:text-slate-100 dark:placeholder:text-slate-600;
+  }
+
+  .glass-card {
+    @apply bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm;
+    @apply dark:bg-slate-900/50 dark:border-slate-800 dark:backdrop-blur-md;
+  }
+}
