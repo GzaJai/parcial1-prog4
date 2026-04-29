@@ -3,7 +3,6 @@ import {
   Package, 
   Tags, 
   Salad, 
-  Search,
   Zap
 } from 'lucide-react';
 import { NavLink } from 'react-router-dom';

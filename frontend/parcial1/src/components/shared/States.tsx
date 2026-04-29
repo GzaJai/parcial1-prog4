@@ -1,5 +1,4 @@
-import React from 'react';
-import { Loader2, AlertCircle } from 'lucide-react';
+import { AlertCircle } from 'lucide-react';
 
 // --- Full Page Loader ---
 export function PageLoader({ message = "Cargando datos..." }: { message?: string }) {

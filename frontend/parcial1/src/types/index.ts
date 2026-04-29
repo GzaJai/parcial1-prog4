@@ -42,6 +42,8 @@ export interface ProductoCreate {
   ingrediente_ids: number[];
 }
 
+export type ProductoUpdate = Partial<ProductoCreate>;
+
 export interface PaginatedResponse<T> {
   items: T[];
   total: number;

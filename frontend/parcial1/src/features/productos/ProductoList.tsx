@@ -1,4 +1,3 @@
-import React from 'react';
 import { Pencil, Trash2, Eye, Package } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Table, TableHeader, TableRow, TableCell } from '../../components/ui/Table';

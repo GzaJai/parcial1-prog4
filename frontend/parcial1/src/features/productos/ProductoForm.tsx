@@ -6,7 +6,6 @@ import { useIngredientes } from '../../hooks/useIngredientes';
 import Input from '../../components/ui/Input';
 import { Select } from '../../components/ui/Select';
 import Button from '../../components/ui/Button';
-import { Badge } from '../../components/ui/Input'; // Oops, Badge was in Input.tsx, I'll fix that later or just import from there
 import ImageUploader from '../../components/shared/ImageUploader';
 import { getImageUrl } from '../../utils/format';
 import { AlertTriangle, X, Info } from 'lucide-react';
@@ -52,7 +51,7 @@ export default function ProductoForm({ initialData, onSuccess, onCancel }: Produ
         queryClient.invalidateQueries({ queryKey: ['productos'] });
         onSuccess();
       },
-      onError: (err: any) => {
+      onError: () => {
         setServerError("Ocurrió un error al guardar el producto. Verifique los datos.");
       }
     };
