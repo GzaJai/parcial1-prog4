@@ -9,10 +9,12 @@ class CategoriaService:
     def __init__(self, uow: UnitOfWork):
         self.uow = uow
 
-    def get_all(self, offset: int = 0, limit: int = 10):
+    def get_all(self, offset: int = 0, limit: Optional[int] = None):
         statement = select(Categoria).order_by(Categoria.id.desc())
         total = len(self.uow.session.exec(select(Categoria)).all())
-        results = self.uow.session.exec(statement.offset(offset).limit(limit)).all()
+        if limit is not None:
+            statement = statement.offset(offset).limit(limit)
+        results = self.uow.session.exec(statement).all()
         return {"items": results, "total": total}
 
     def get_by_id(self, id: int) -> Categoria:

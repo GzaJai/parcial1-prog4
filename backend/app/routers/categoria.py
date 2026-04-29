@@ -12,20 +12,21 @@ def get_categoria_service(session: Annotated[Session, Depends(get_session)]):
     uow = UnitOfWork(session)
     return CategoriaService(uow)
 
+from typing import List, Annotated, Optional
 from schemas.common import PaginatedResponse
 
 @router.get("/", response_model=PaginatedResponse[CategoriaRead], summary="Listar todas las categorías")
 def listar_categorias(
     service: Annotated[CategoriaService, Depends(get_categoria_service)],
     offset: int = Query(0, ge=0),
-    limit: int = Query(10, ge=1, le=100)
+    limit: Optional[int] = Query(None, ge=1, le=1000)
 ):
     result = service.get_all(offset=offset, limit=limit)
     return {
         "items": result["items"],
         "total": result["total"],
         "offset": offset,
-        "limit": limit,
+        "limit": limit or result["total"],
         "count": len(result["items"])
     }
 

@@ -14,18 +14,20 @@ def get_producto_service(session: Annotated[Session, Depends(get_session)]):
 
 from schemas.common import PaginatedResponse
 
-@router.get("/", response_model=PaginatedResponse[ProductoRead], summary="Listar todos los productos", description="Retorna una lista paginada de todos los productos ordenados por ID descendente.")
+from typing import List, Annotated, Optional
+
+@router.get("/", response_model=PaginatedResponse[ProductoRead], summary="Listar todos los productos")
 def listar_productos(
     service: Annotated[ProductoService, Depends(get_producto_service)],
-    offset: int = Query(0, ge=0, description="Número de registros a omitir"),
-    limit: int = Query(10, ge=1, le=100, description="Número máximo de registros a retornar")
+    offset: int = Query(0, ge=0),
+    limit: Optional[int] = Query(None, ge=1, le=1000)
 ):
     result = service.get_all(offset=offset, limit=limit)
     return {
         "items": result["items"],
         "total": result["total"],
         "offset": offset,
-        "limit": limit,
+        "limit": limit or result["total"],
         "count": len(result["items"])
     }
 

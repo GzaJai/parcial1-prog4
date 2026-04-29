@@ -1,3 +1,4 @@
+from typing import Optional
 from typing import List
 from sqlmodel import select
 from fastapi import HTTPException, status
@@ -9,10 +10,12 @@ class IngredienteService:
     def __init__(self, uow: UnitOfWork):
         self.uow = uow
 
-    def get_all(self, offset: int = 0, limit: int = 10):
+    def get_all(self, offset: int = 0, limit: Optional[int] = None):
         statement = select(Ingrediente).order_by(Ingrediente.id.desc())
         total = len(self.uow.session.exec(select(Ingrediente)).all())
-        results = self.uow.session.exec(statement.offset(offset).limit(limit)).all()
+        if limit is not None:
+            statement = statement.offset(offset).limit(limit)
+        results = self.uow.session.exec(statement).all()
         return {"items": results, "total": total}
 
     def get_by_id(self, id: int) -> Ingrediente:
