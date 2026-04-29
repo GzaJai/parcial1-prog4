@@ -2,8 +2,7 @@ import {
   LayoutDashboard, 
   Package, 
   Tags, 
-  Salad, 
-  Zap
+  Salad
 } from 'lucide-react';
 import { NavLink } from 'react-router-dom';
 
@@ -19,8 +18,8 @@ export function Sidebar() {
     <aside className="w-72 bg-white dark:bg-slate-950 border-r border-slate-100 dark:border-slate-900 flex flex-col transition-all duration-500">
       <div className="p-10">
         <div className="flex items-center gap-4 group cursor-pointer">
-          <div className="w-10 h-10 bg-brand rounded-2xl flex items-center justify-center shadow-lg shadow-brand/20 group-hover:rotate-12 transition-transform">
-            <Zap size={22} className="text-white" fill="currentColor" />
+          <div className="w-10 h-10  rounded-2xl flex items-center justify-center shadow-lg shadow-brand/20 group-hover:rotate-12 transition-transform overflow-hidden">
+            <img src="/favicon.svg" alt="Logo" className="w-6 h-6" />
           </div>
           <div className="flex flex-col">
             <span className="text-xl font-black tracking-tight text-slate-900 dark:text-white">InventoryOS</span>
