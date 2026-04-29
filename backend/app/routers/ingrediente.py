@@ -12,7 +12,7 @@ def get_ingrediente_service(session: Session = Depends(get_session)):
     uow = UnitOfWork(session)
     return IngredienteService(uow)
 
-from typing import List, Annotated, Optional
+from typing import Optional
 from schemas.common import PaginatedResponse
 
 @router.get("/", response_model=PaginatedResponse[IngredienteRead], status_code=status.HTTP_200_OK)
