@@ -24,9 +24,12 @@ export function TableHeader({ columns }: { columns: string[] }) {
   );
 }
 
-export function TableRow({ children, className = '' }: { children: React.ReactNode; className?: string }) {
+export function TableRow({ children, className = '', ...props }: React.HTMLAttributes<HTMLTableRowElement> & { children: React.ReactNode }) {
   return (
-    <tr className={`group border-b border-slate-50 dark:border-slate-800/50 last:border-none hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-all duration-300 ${className}`}>
+    <tr 
+      className={`group border-b border-slate-50 dark:border-slate-800/50 last:border-none hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-all duration-300 ${className}`}
+      {...props}
+    >
       {children}
     </tr>
   );
