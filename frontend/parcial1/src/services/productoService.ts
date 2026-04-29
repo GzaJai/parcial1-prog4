@@ -2,7 +2,7 @@ import api from './api';
 import type { Producto, ProductoCreate, ProductoUpdate, PaginatedResponse } from '../types';
 
 export const productoService = {
-  getAll: async (offset: number = 0, limit: number = 10, disponible: boolean = true) => {
+  getAll: async (offset: number = 0, limit?: number, disponible: boolean = true) => {
     const { data } = await api.get<PaginatedResponse<Producto>>('/productos/', {
       params: { offset, limit, disponible },
     });

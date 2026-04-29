@@ -20,8 +20,8 @@ interface ProductoFormProps {
 
 export default function ProductoForm({ initialData, onSuccess, onCancel }: ProductoFormProps) {
   const queryClient = useQueryClient();
-  const { categoriasQuery } = useCategorias(1, 1000); // Fetch all for select
-  const { ingredientesQuery } = useIngredientes(1, 1000); // Fetch all for select
+  const { categoriasQuery } = useCategorias(); // Sin parámetros = todos
+  const { ingredientesQuery } = useIngredientes(); // Sin parámetros = todos
   const { createMutation, updateMutation } = useProductos();
   
   const [formData, setFormData] = useState<ProductoCreate>({
@@ -135,39 +135,31 @@ export default function ProductoForm({ initialData, onSuccess, onCancel }: Produ
           </div>
 
           <Select 
-            label="Categoría"
-            required
-            value={formData.categoria_ids?.[0] || ''}
-            onChange={e => setFormData({ ...formData, categoria_ids: e.target.value ? [Number(e.target.value)] : [] })}
-            options={categoriasQuery.data?.map(c => ({ value: c.id, label: c.nombre })) || []}
+            label="Categorías"
+            multiple
+            value={formData.categoria_ids}
+            onChange={(val) => setFormData({ ...formData, categoria_ids: val })}
+            options={categoriasQuery.data?.items.map(c => ({ value: c.id, label: c.nombre })) || []}
+            error={categoriasQuery.isError ? "Error al cargar categorías" : undefined}
           />
 
-          <div>
-            <label className="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest mb-3 ml-1">
-              Ingredientes
-            </label>
-            <div className="max-h-40 overflow-y-auto p-4 bg-slate-50 dark:bg-slate-950 rounded-2xl border border-slate-100 dark:border-slate-800 grid grid-cols-1 gap-2 custom-scrollbar">
-              {ingredientesQuery.data?.map(i => (
-                <label key={i.id} className="flex items-center gap-3 text-xs text-slate-600 dark:text-slate-400 cursor-pointer hover:bg-white dark:hover:bg-slate-900 p-2 rounded-xl border border-transparent hover:border-slate-100 dark:hover:border-slate-800 transition-all group">
-                  <input
-                    type="checkbox"
-                    className="w-4 h-4 rounded-lg border-slate-300 dark:border-slate-700 text-brand focus:ring-brand"
-                    checked={formData.ingrediente_ids?.includes(i.id)}
-                    onChange={e => {
-                      const ids = formData.ingrediente_ids || [];
-                      setFormData({ 
-                        ...formData, 
-                        ingrediente_ids: e.target.checked ? [...ids, i.id] : ids.filter(id => id !== i.id) 
-                      });
-                    }}
-                  />
-                  <span className="flex-1 font-medium group-hover:text-slate-900 dark:group-hover:text-slate-100">{i.nombre}</span>
-                  {i.es_alergeno && (
-                    <AlertTriangle size={12} className="text-amber-500 shrink-0" />
-                  )}
-                </label>
-              ))}
-            </div>
+          <Select 
+            label="Ingredientes"
+            multiple
+            value={formData.ingrediente_ids}
+            onChange={(val) => setFormData({ ...formData, ingrediente_ids: val })}
+            options={ingredientesQuery.data?.items.map(i => ({ 
+              value: i.id, 
+              label: i.es_alergeno ? `⚠️ ${i.nombre}` : i.nombre 
+            })) || []}
+            error={ingredientesQuery.isError ? "Error al cargar ingredientes" : undefined}
+          />
+
+          <div className="flex items-start gap-3 p-4 bg-slate-50 dark:bg-slate-900 rounded-2xl border border-slate-100 dark:border-slate-800">
+            <Info size={16} className="text-slate-400 shrink-0 mt-0.5" />
+            <p className="text-[10px] text-slate-500 leading-relaxed font-medium">
+              Seleccione todas las categorías e ingredientes que componen este producto. Los ingredientes marcados con ⚠️ son considerados alérgenos.
+            </p>
           </div>
         </div>
       </div>

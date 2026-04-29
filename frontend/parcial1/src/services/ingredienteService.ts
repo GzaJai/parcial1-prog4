@@ -2,7 +2,7 @@ import api from './api';
 import type { Ingrediente, IngredienteCreate, IngredienteUpdate, PaginatedResponse } from '../types';
 
 export const ingredienteService = {
-  getAll: async (offset: number = 0, limit: number = 10) => {
+  getAll: async (offset: number = 0, limit?: number) => {
     const { data } = await api.get<PaginatedResponse<Ingrediente>>('/ingredientes/', {
       params: { offset, limit },
     });

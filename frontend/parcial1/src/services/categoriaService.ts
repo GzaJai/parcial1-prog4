@@ -2,7 +2,7 @@ import api from './api';
 import type { Categoria, CategoriaCreate, CategoriaUpdate, PaginatedResponse } from '../types';
 
 export const categoriaService = {
-  getAll: async (offset: number = 0, limit: number = 10) => {
+  getAll: async (offset: number = 0, limit?: number) => {
     const { data } = await api.get<PaginatedResponse<Categoria>>('/categorias/', {
       params: { offset, limit },
     });

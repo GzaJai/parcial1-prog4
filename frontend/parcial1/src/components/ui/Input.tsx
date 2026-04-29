@@ -8,13 +8,31 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement | HTMLTe
 
 export default function Input({ label, error, isTextArea, className = '', ...props }: InputProps) {
   const Component = isTextArea ? 'textarea' : 'input';
+
+  const handleFocus = (e: React.FocusEvent<any>) => {
+    if (props.type === 'number' && (e.target.value === '0' || e.target.value === '0.00')) {
+      e.target.select();
+    }
+    if (props.onFocus) props.onFocus(e);
+  };
   
   return (
     <div className="space-y-1.5">
+      <style>{`
+        input::-webkit-outer-spin-button,
+        input::-webkit-inner-spin-button {
+          -webkit-appearance: none;
+          margin: 0;
+        }
+        input[type=number] {
+          -moz-appearance: textfield;
+        }
+      `}</style>
       <label className="block text-[10px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-widest ml-1">
         {label}
       </label>
       <Component
+        onFocus={handleFocus}
         className={`w-full bg-white dark:bg-slate-950 border-2 rounded-xl px-4 py-2.5 text-sm transition-all focus:outline-none focus:ring-4 focus:ring-brand/10 text-slate-900 dark:text-white placeholder:text-slate-400 dark:placeholder:text-slate-700 ${
           error 
             ? 'border-red-500' 

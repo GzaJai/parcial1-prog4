@@ -2,9 +2,9 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { ingredienteService } from '../services/ingredienteService';
 import type { IngredienteUpdate } from '../types';
 
-export function useIngredientes(page: number = 1, limit: number = 10) {
+export function useIngredientes(page?: number, limit?: number) {
   const queryClient = useQueryClient();
-  const offset = (page - 1) * limit;
+  const offset = page && limit ? (page - 1) * limit : 0;
 
   const ingredientesQuery = useQuery({
     queryKey: ['ingredientes', page, limit],

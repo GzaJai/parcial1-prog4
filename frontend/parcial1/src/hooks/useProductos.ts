@@ -2,9 +2,9 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { productoService } from '../services/productoService';
 import type { ProductoUpdate } from '../types';
 
-export function useProductos(page: number = 1, limit: number = 10) {
+export function useProductos(page?: number, limit?: number) {
   const queryClient = useQueryClient();
-  const offset = (page - 1) * limit;
+  const offset = page && limit ? (page - 1) * limit : 0;
 
   const productosQuery = useQuery({
     queryKey: ['productos', page, limit],

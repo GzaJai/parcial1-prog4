@@ -2,9 +2,9 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { categoriaService } from '../services/categoriaService';
 import type { CategoriaUpdate } from '../types';
 
-export function useCategorias(page: number = 1, limit: number = 10) {
+export function useCategorias(page?: number, limit?: number) {
   const queryClient = useQueryClient();
-  const offset = (page - 1) * limit;
+  const offset = page && limit ? (page - 1) * limit : 0;
 
   const categoriasQuery = useQuery({
     queryKey: ['categorias', page, limit],
